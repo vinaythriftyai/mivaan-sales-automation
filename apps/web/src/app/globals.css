@@ -1,0 +1,101 @@
+@import "tailwindcss";
+
+:root {
+  --background: #f4f7f9;
+  --foreground: #1e293b;
+  --surface: #ffffff;
+  --surface-muted: #e8eef2;
+  --sidebar: #111827;
+  --sidebar-secondary: #1f2937;
+  --primary: #1f4e78;
+  --primary-hover: #173a5a;
+  --accent: #0e7490;
+  --border-color: #d5dee5;
+  --text-muted: #64748b;
+  --success: #15803d;
+  --warning: #d97706;
+  --danger: #b91c1c;
+  --info: #0369a1;
+  --disabled: #94a3b8;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-surface-muted: var(--surface-muted);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-secondary: var(--sidebar-secondary);
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-accent: var(--accent);
+  --color-border: var(--border-color);
+  --color-text-muted: var(--text-muted);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-danger: var(--danger);
+  --color-info: var(--info);
+  --color-disabled: var(--disabled);
+}
+
+* { box-sizing: border-box; }
+html { background: var(--background); }
+body {
+  min-height: 100vh;
+  margin: 0;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+button, input, select, textarea { font: inherit; }
+
+.app-card {
+  border: 1px solid var(--border-color);
+  border-radius: 1rem;
+  background: var(--surface);
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+}
+
+.btn-primary,
+.btn-secondary,
+.btn-danger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem;
+  border-radius: .625rem;
+  padding: .625rem 1rem;
+  font-size: .875rem;
+  font-weight: 600;
+  transition: .15s ease;
+}
+.btn-primary { border: 0; background: var(--primary); color: white; }
+.btn-primary:hover { background: var(--primary-hover); }
+.btn-primary:disabled { cursor: not-allowed; background: var(--disabled); }
+.btn-secondary { border: 1px solid var(--border-color); background: white; color: var(--foreground); }
+.btn-secondary:hover { background: var(--surface-muted); }
+.btn-danger { border: 0; background: var(--danger); color: white; }
+
+.input-field,
+.select-field,
+.textarea-field {
+  width: 100%;
+  border: 1px solid var(--border-color);
+  border-radius: .625rem;
+  background: white;
+  padding: .6875rem .75rem;
+  color: var(--foreground);
+  outline: none;
+}
+.input-field:focus,
+.select-field:focus,
+.textarea-field:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(31, 78, 120, .12);
+}
+.field-label { display: block; margin-bottom: .375rem; font-size: .875rem; font-weight: 600; }
+.field-help { margin-top: .25rem; color: var(--text-muted); font-size: .75rem; }
+.error-banner { border: 1px solid #fecaca; border-radius: .75rem; background: #fef2f2; padding: .875rem 1rem; color: #991b1b; font-size: .875rem; }
+.success-banner { border: 1px solid #bbf7d0; border-radius: .75rem; background: #f0fdf4; padding: .875rem 1rem; color: #166534; font-size: .875rem; }
+.table-shell { overflow: hidden; border: 1px solid var(--border-color); border-radius: 1rem; background: white; }
+.table-head { background: #edf2f6; color: #475569; font-size: .75rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; }

@@ -1,0 +1,16 @@
+{
+  "name": "mivaan-sales-automation",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev:api": "npm run dev --workspace=@mivaan/api",
+    "dev:web": "npm run dev --workspace=@mivaan/web",
+    "build:api": "npm run build --workspace=@mivaan/api",
+    "build:web": "npm run build --workspace=@mivaan/web",
+    "test:api": "npm run test --workspace=@mivaan/api"
+  }
+}
