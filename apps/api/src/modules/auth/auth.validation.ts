@@ -1,5 +1,13 @@
 import { z } from "zod";
 
+const signupRoleSchema = z.enum([
+  "CAM",
+  "HOD",
+  "SALES",
+  "SYSTEM_ADMIN",
+  "ACCOUNTS",
+]);
+
 export const signupSchema = z
   .object({
     name: z
@@ -23,6 +31,8 @@ export const signupSchema = z
       .regex(/[0-9]/, "Password must contain at least one number"),
 
     confirmPassword: z.string(),
+
+    role: signupRoleSchema.optional(),
 
     territory: z
       .string()

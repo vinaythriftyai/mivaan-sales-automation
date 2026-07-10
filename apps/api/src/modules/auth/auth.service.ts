@@ -3,16 +3,22 @@ import jwt from "jsonwebtoken";
 import { Types } from "mongoose";
 
 import { AppError } from "../../common/errors/app-errors.js";
-import { UserRole } from "../../common/types/workflows-enums.js";
 import { env } from "../../config/env.js";
 import { UserModel } from "../users/user.model.js";
+
+type SignupRole =
+  | "CAM"
+  | "HOD"
+  | "SALES"
+  | "SYSTEM_ADMIN"
+  | "ACCOUNTS";
 
 type SignupInput = {
   name: string;
   email: string;
   password: string;
   confirmPassword: string;
-  role: UserRole;
+  role?: SignupRole;
   territory?: string;
   division?: string;
 };
@@ -62,12 +68,14 @@ export async function signupUser(input: SignupInput) {
 
   const passwordHash = await bcrypt.hash(input.password, 12);
 
+  const selectedRole = input.role ?? "CAM";
+
   const user = await UserModel.create({
     tenantId,
     name: input.name.trim(),
     email: normalizedEmail,
     passwordHash,
-    role: input.role,
+    role: selectedRole,
     territory: input.territory,
     division: input.division,
     isActive: true,
@@ -105,21 +113,16 @@ export async function loginUser(input: LoginInput) {
   }).select("+passwordHash");
 
   if (!user) {
-    throw new AppError(
-      "Invalid email or password",
-      401,
-      "INVALID_CREDENTIALS",
-    );
+    throw new AppError("Invalid email or password", 401, "INVALID_CREDENTIALS");
   }
 
-  const passwordMatches = await bcrypt.compare(input.password, user.passwordHash);
+  const passwordMatches = await bcrypt.compare(
+    input.password,
+    user.passwordHash,
+  );
 
   if (!passwordMatches) {
-    throw new AppError(
-      "Invalid email or password",
-      401,
-      "INVALID_CREDENTIALS",
-    );
+    throw new AppError("Invalid email or password", 401, "INVALID_CREDENTIALS");
   }
 
   const accessToken = generateAccessToken({
