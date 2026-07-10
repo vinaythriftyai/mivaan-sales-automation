@@ -116,15 +116,6 @@ export default function ActivitiesPage() {
   return (
     <AuthGuard>
       <AppShell>
-        {/* <PageHeader
-          title="Activity Register"
-          description="All visit, note, follow-up, and customer activity records."
-          action={
-            <button onClick={() => void loadRecords()} className="btn-secondary">
-              Refresh
-            </button>
-          }
-        /> */}
         <PageHeader
           title="Activity Register"
           description="All visit, note, follow-up, and customer activity records."
