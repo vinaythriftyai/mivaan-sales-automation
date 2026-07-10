@@ -94,7 +94,7 @@ export default function ExistingCustomersPage() {
         <PageHeader
           title="Existing Customer List"
           description="Customers already created in customer master / BC-365."
-          action={
+          actions={
             <button
               onClick={() => void loadRecords()}
               className="btn-secondary"

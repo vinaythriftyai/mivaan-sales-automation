@@ -100,7 +100,7 @@ export default function PotentialCustomersPage() {
         <PageHeader
           title="Potential Customer List"
           description="Customers qualified as potential or high-potential after visit."
-          action={
+          actions={
             <button
               onClick={() => void loadRecords()}
               className="btn-secondary"

@@ -102,7 +102,7 @@ export default function McaCustomersPage() {
         <PageHeader
           title="MCA Customer List"
           description="Customers acquired through MCA workflow and created in BC-365."
-          action={
+          actions={
             <button onClick={() => void loadRecords()} className="btn-secondary">
               Refresh
             </button>

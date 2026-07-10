@@ -192,7 +192,7 @@ export default function DashboardPage() {
         <PageHeader
           title="Sales Dashboard"
           description="Live view of acquisition, visit planning, onboarding, approvals, and ERP customer creation."
-          action={
+          actions={
             <button
               type="button"
               onClick={() => void loadDashboard()}

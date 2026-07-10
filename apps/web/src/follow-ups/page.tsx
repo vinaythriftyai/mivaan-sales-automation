@@ -178,7 +178,7 @@ export default function FollowUpsPage() {
         <PageHeader
           title="Follow-up Register"
           description="Upcoming customer follow-ups generated from visits and activities."
-          action={
+          actions={
             <button onClick={() => void loadRecords()} className="btn-secondary">
               Refresh
             </button>

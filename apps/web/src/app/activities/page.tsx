@@ -87,9 +87,7 @@ export default function ActivitiesPage() {
     return records.filter((record) => {
       const matchesSearch = includesSearch(record, search);
 
-      const matchesType = activityType
-        ? record.type === activityType
-        : true;
+      const matchesType = activityType ? record.type === activityType : true;
 
       return matchesSearch && matchesType;
     });
@@ -118,7 +116,7 @@ export default function ActivitiesPage() {
   return (
     <AuthGuard>
       <AppShell>
-        <PageHeader
+        {/* <PageHeader
           title="Activity Register"
           description="All visit, note, follow-up, and customer activity records."
           action={
@@ -126,8 +124,19 @@ export default function ActivitiesPage() {
               Refresh
             </button>
           }
+        /> */}
+        <PageHeader
+          title="Activity Register"
+          description="All visit, note, follow-up, and customer activity records."
+          actions={
+            <button
+              onClick={() => void loadRecords()}
+              className="btn-secondary"
+            >
+              Refresh
+            </button>
+          }
         />
-
         <RegisterToolbar
           search={search}
           onSearchChange={setSearch}
