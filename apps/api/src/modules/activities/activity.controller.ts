@@ -8,8 +8,7 @@ import {
   reopenFollowUp,
 } from "./activity.service.js";
 import {
-  createManualActivity,
-  listPartyActivities,
+ 
 } from "./activity.service.js";
 
 function requireCurrentUser(request: Request) {

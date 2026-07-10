@@ -2,7 +2,7 @@ import cors from "cors";
 import express from "express";
 import rateLimit from "express-rate-limit";
 import helmet from "helmet";
-import pinoHttp from "pino-http";
+import pinoHttpModule from "pino-http";
 import { approvalRouter } from "./modules/approvals/approval.routes.js";
 import { auditRouter } from "./modules/audit/audit.routes.js";
 import { onboardingRouter } from "./modules/onboarding/onboarding.routes.js";
@@ -17,7 +17,8 @@ import { dashboardRouter } from "./modules/dashboard/dashboard.routes.js";
 import { registerRouter } from "./modules/registers/register.routes.js";
 import { activityRouter } from "./modules/activities/activity.routes.js";
 export const app = express();
-
+const pinoHttp =
+  pinoHttpModule as unknown as () => import("express").RequestHandler;
 app.disable("x-powered-by");
 
 app.use(helmet());

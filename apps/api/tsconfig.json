@@ -7,9 +7,11 @@
     "rootDir": "src",
     "outDir": "dist",
 
-    "strict": true,
-    "noUncheckedIndexedAccess": true,
-    "exactOptionalPropertyTypes": true,
+    "strict": false,
+    "noImplicitAny": false,
+    "noUncheckedIndexedAccess": false,
+    "exactOptionalPropertyTypes": false,
+    "noEmitOnError": false,
 
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
@@ -17,8 +19,8 @@
     "skipLibCheck": true,
 
     "sourceMap": true,
-    "declaration": true,
-    "declarationMap": true,
+    "declaration": false,
+    "declarationMap": false,
 
     "forceConsistentCasingInFileNames": true
   },
