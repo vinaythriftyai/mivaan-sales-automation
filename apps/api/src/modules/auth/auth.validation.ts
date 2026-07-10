@@ -1,48 +1,3 @@
-// // import { z } from "zod";
-
-// // export const loginSchema = z.object({
-// //   email: z.string().trim().email(),
-// //   password: z.string().min(8)
-// // });
-// import { z } from "zod";
-
-// export const signupSchema = z
-//   .object({
-//     name: z.string().trim().min(2).max(100),
-
-//     email: z
-//       .string()
-//       .trim()
-//       .email()
-//       .transform(value => value.toLowerCase()),
-
-//     password: z
-//       .string()
-//       .min(8)
-//       .max(100)
-//       .regex(/[A-Z]/, "Password must contain an uppercase letter")
-//       .regex(/[a-z]/, "Password must contain a lowercase letter")
-//       .regex(/[0-9]/, "Password must contain a number"),
-
-//     confirmPassword: z.string(),
-
-//     territory: z.string().trim().max(100).optional(),
-//     division: z.string().trim().max(100).optional()
-//   })
-//   .refine(data => data.password === data.confirmPassword, {
-//     message: "Passwords do not match",
-//     path: ["confirmPassword"]
-//   });
-
-// export const loginSchema = z.object({
-//   email: z
-//     .string()
-//     .trim()
-//     .email()
-//     .transform(value => value.toLowerCase()),
-
-//   password: z.string().min(8)
-// });
 import { z } from "zod";
 
 export const signupSchema = z
@@ -63,18 +18,9 @@ export const signupSchema = z
       .string()
       .min(8, "Password must contain at least 8 characters")
       .max(100, "Password cannot exceed 100 characters")
-      .regex(
-        /[A-Z]/,
-        "Password must contain at least one uppercase letter"
-      )
-      .regex(
-        /[a-z]/,
-        "Password must contain at least one lowercase letter"
-      )
-      .regex(
-        /[0-9]/,
-        "Password must contain at least one number"
-      ),
+      .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
+      .regex(/[a-z]/, "Password must contain at least one lowercase letter")
+      .regex(/[0-9]/, "Password must contain at least one number"),
 
     confirmPassword: z.string(),
 
@@ -88,15 +34,12 @@ export const signupSchema = z
       .string()
       .trim()
       .max(100, "Division cannot exceed 100 characters")
-      .optional()
+      .optional(),
   })
-  .refine(
-    (data) => data.password === data.confirmPassword,
-    {
-      message: "Passwords do not match",
-      path: ["confirmPassword"]
-    }
-  );
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"],
+  });
 
 export const loginSchema = z.object({
   email: z
@@ -105,7 +48,5 @@ export const loginSchema = z.object({
     .email("Enter a valid email address")
     .transform((value) => value.toLowerCase()),
 
-  password: z
-    .string()
-    .min(8, "Password must contain at least 8 characters")
+  password: z.string().min(8, "Password must contain at least 8 characters"),
 });

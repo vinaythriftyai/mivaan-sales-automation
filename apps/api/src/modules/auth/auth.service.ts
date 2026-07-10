@@ -1,85 +1,9 @@
-// import bcrypt from "bcryptjs";
-// import jwt from "jsonwebtoken";
-
-// //import { AppError } from "../../common/errors/app-error.js";
-// import { AppError } from "../../common/errors/app-errors.js";
-// import { env } from "../../config/env.js";
-// import { UserModel } from "../users/user.model.js";
-
-// type LoginInput = {
-//   email: string;
-//   password: string;
-// };
-
-// export async function loginUser(input: LoginInput) {
-//   const user = await UserModel.findOne({
-//     email: input.email.toLowerCase(),
-//     isActive: true
-//   }).select("+passwordHash");
-
-//   if (!user) {
-//     throw new AppError(
-//       "Invalid email or password",
-//       401,
-//       "INVALID_CREDENTIALS"
-//     );
-//   }
-
-//   const passwordMatches = await bcrypt.compare(
-//     input.password,
-//     user.passwordHash
-//   );
-
-//   if (!passwordMatches) {
-//     throw new AppError(
-//       "Invalid email or password",
-//       401,
-//       "INVALID_CREDENTIALS"
-//     );
-//   }
-
-//   const accessToken = jwt.sign(
-//     {
-//       userId: user._id.toString(),
-//       tenantId: user.tenantId.toString(),
-//       role: user.role,
-//       email: user.email
-//     },
-//     env.JWT_SECRET,
-//     {
-//       expiresIn: env.JWT_EXPIRES_IN as jwt.SignOptions["expiresIn"]
-//     }
-//   );
-
-//   return {
-//     accessToken,
-//     user: {
-//       id: user._id,
-//       name: user.name,
-//       email: user.email,
-//       role: user.role,
-//       territory: user.territory,
-//       division: user.division
-//     }
-//   };
-// }
-
-// export async function getCurrentUser(userId: string) {
-//   const user = await UserModel.findById(userId).lean();
-
-//   if (!user) {
-//     throw new AppError("User not found", 404, "USER_NOT_FOUND");
-//   }
-
-//   return user;
-// }
-
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { Types } from "mongoose";
+
 import { AppError } from "../../common/errors/app-errors.js";
 import { UserRole } from "../../common/types/workflows-enums.js";
-//port {env} from "../../config/env.js;
 import { env } from "../../config/env.js";
 import { UserModel } from "../users/user.model.js";
 
@@ -88,6 +12,7 @@ type SignupInput = {
   email: string;
   password: string;
   confirmPassword: string;
+  role: UserRole;
   territory?: string;
   division?: string;
 };
@@ -108,67 +33,51 @@ function generateAccessToken(user: {
       userId: user._id.toString(),
       tenantId: user.tenantId.toString(),
       role: user.role,
-      email: user.email
+      email: user.email,
     },
     env.JWT_SECRET,
     {
-      expiresIn:
-        env.JWT_EXPIRES_IN as jwt.SignOptions["expiresIn"]
-    }
+      expiresIn: env.JWT_EXPIRES_IN as jwt.SignOptions["expiresIn"],
+    },
   );
 }
 
-/**
- * Creates a new development user.
- *
- * Public signup always creates a CAM user.
- * HOD, Sales, Accounts and Admin users should be created
- * through an admin flow or seed script.
- */
 export async function signupUser(input: SignupInput) {
   const normalizedEmail = input.email.trim().toLowerCase();
 
-  const tenantId = new Types.ObjectId(
-    env.DEFAULT_TENANT_ID
-  );
+  const tenantId = new Types.ObjectId(env.DEFAULT_TENANT_ID);
 
   const existingUser = await UserModel.findOne({
     tenantId,
-    email: normalizedEmail
+    email: normalizedEmail,
   }).lean();
 
   if (existingUser) {
     throw new AppError(
       "A user with this email already exists",
       409,
-      "EMAIL_ALREADY_REGISTERED"
+      "EMAIL_ALREADY_REGISTERED",
     );
   }
 
-  const passwordHash = await bcrypt.hash(
-    input.password,
-    12
-  );
+  const passwordHash = await bcrypt.hash(input.password, 12);
 
   const user = await UserModel.create({
     tenantId,
     name: input.name.trim(),
     email: normalizedEmail,
     passwordHash,
-
-    // Do not accept role from the public signup request.
-    role: UserRole.CAM,
-
+    role: input.role,
     territory: input.territory,
     division: input.division,
-    isActive: true
+    isActive: true,
   });
 
   const accessToken = generateAccessToken({
     _id: user._id,
     tenantId: user.tenantId,
     role: user.role,
-    email: user.email
+    email: user.email,
   });
 
   return {
@@ -179,42 +88,37 @@ export async function signupUser(input: SignupInput) {
       email: user.email,
       role: user.role,
       territory: user.territory,
-      division: user.division
-    }
+      division: user.division,
+    },
   };
 }
 
 export async function loginUser(input: LoginInput) {
   const normalizedEmail = input.email.trim().toLowerCase();
 
-  const tenantId = new Types.ObjectId(
-    env.DEFAULT_TENANT_ID
-  );
+  const tenantId = new Types.ObjectId(env.DEFAULT_TENANT_ID);
 
   const user = await UserModel.findOne({
     tenantId,
     email: normalizedEmail,
-    isActive: true
+    isActive: true,
   }).select("+passwordHash");
 
   if (!user) {
     throw new AppError(
       "Invalid email or password",
       401,
-      "INVALID_CREDENTIALS"
+      "INVALID_CREDENTIALS",
     );
   }
 
-  const passwordMatches = await bcrypt.compare(
-    input.password,
-    user.passwordHash
-  );
+  const passwordMatches = await bcrypt.compare(input.password, user.passwordHash);
 
   if (!passwordMatches) {
     throw new AppError(
       "Invalid email or password",
       401,
-      "INVALID_CREDENTIALS"
+      "INVALID_CREDENTIALS",
     );
   }
 
@@ -222,7 +126,7 @@ export async function loginUser(input: LoginInput) {
     _id: user._id,
     tenantId: user.tenantId,
     role: user.role,
-    email: user.email
+    email: user.email,
   });
 
   return {
@@ -233,22 +137,16 @@ export async function loginUser(input: LoginInput) {
       email: user.email,
       role: user.role,
       territory: user.territory,
-      division: user.division
-    }
+      division: user.division,
+    },
   };
 }
 
-export async function getCurrentUser(
-  userId: string
-) {
+export async function getCurrentUser(userId: string) {
   const user = await UserModel.findById(userId).lean();
 
   if (!user) {
-    throw new AppError(
-      "User not found",
-      404,
-      "USER_NOT_FOUND"
-    );
+    throw new AppError("User not found", 404, "USER_NOT_FOUND");
   }
 
   return user;
